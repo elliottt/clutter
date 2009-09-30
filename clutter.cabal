@@ -9,6 +9,7 @@ build-depends:
 exposed-modules:
   Clutter
   Clutter.Actor
+  Clutter.Color
   Clutter.Init
   Clutter.Stage
 

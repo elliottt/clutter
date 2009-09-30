@@ -1,6 +1,7 @@
-import qualified Clutter
+import Clutter
 
-main = Clutter.application $
-  do stage <- Clutter.getDefault
-     Clutter.setSize stage 200 200
-     Clutter.show stage
+main = application $
+  do stage <- stageGetDefault
+     actorSetSize stage 200 200
+     stageSetColor stage (Clutter.Color 255 0 0 0)
+     actorShow stage
