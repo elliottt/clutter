@@ -1,9 +1,10 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
+{-# LANGUAGE DeriveDataTypeable #-}
 
-module Clutter.Init (
-    initClutter
+module Clutter.Init
+  ( application
+
   , ClutterInitError
-
   , clutterInitErrorUnknown
   , clutterInitErrorThreads
   , clutterInitErrorBackend
@@ -15,10 +16,14 @@ module Clutter.Init (
 import Foreign.C.String
 import Foreign.C.Types
 import Foreign
-import System.Environment
+import System.Environment(getProgName,getArgs,withArgs)
+import Control.Exception(Exception,throwIO)
+import Data.Typeable(Typeable)
 
 newtype ClutterInitError = CIE CInt
-  deriving (Eq)
+  deriving (Eq, Typeable)
+
+instance Exception ClutterInitError
 
 instance Show ClutterInitError where
   show e
@@ -53,12 +58,20 @@ withCArgs k = do
           return (res,tail args')
   loop (prog:args) 0 []
 
-initClutter :: IO (Either ClutterInitError [String])
-initClutter  = do
-  (res,args') <- withCArgs c_clutter_init
-  if res == clutterInitSuccess
-    then return (Right args')
-    else return (Left  res  )
+
+application :: IO () -> IO ()
+application m =
+  do (res,args) <- withCArgs c_clutter_init
+     if res == clutterInitSuccess
+       then withArgs args (m >> c_clutter_main)
+       else throwIO res
+
+
 
 foreign import ccall "clutter_init"
   c_clutter_init :: Ptr CInt -> Ptr (Ptr CString) -> IO ClutterInitError
+
+foreign import ccall "clutter_main"
+  c_clutter_main :: IO ()
+
+

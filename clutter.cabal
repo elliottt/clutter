@@ -4,17 +4,17 @@ build-type:     Configure
 hs-source-dirs: src
 
 build-depends:
-  base
+  base >= 4
 
 exposed-modules:
   Clutter
   Clutter.Actor
   Clutter.Init
-  Clutter.Main
   Clutter.Stage
 
 extensions:
   ForeignFunctionInterface
+  DeriveDataTypeable
 
 GHC-options:
   -O2 -Wall

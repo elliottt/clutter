@@ -1,8 +1,6 @@
 import qualified Clutter
 
-main = do 
-  Clutter.initClutter
-  stage <- Clutter.getDefault
-  Clutter.setSize stage 200 200
-  Clutter.show stage
-  Clutter.main
+main = Clutter.application $
+  do stage <- Clutter.getDefault
+     Clutter.setSize stage 200 200
+     Clutter.show stage
