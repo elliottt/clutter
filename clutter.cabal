@@ -8,7 +8,10 @@ build-depends:
 
 exposed-modules:
   Clutter
+  Clutter.Actor
   Clutter.Init
+  Clutter.Main
+  Clutter.Stage
 
 extensions:
   ForeignFunctionInterface
