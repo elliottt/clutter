@@ -1,0 +1,2 @@
+cc-options: @CLUTTER_CFLAGS@
+ld-options: @CLUTTER_LIBS@
