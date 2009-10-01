@@ -1,5 +1,5 @@
 module Clutter.Actor
-  ( IsActor(..)   -- XXX: define instances with care!
+  ( Actor(..)   -- XXX: define instances with care!
   , actorSetSize
   , actorShow
   ) where
@@ -8,21 +8,22 @@ import Prelude hiding (show)
 import Foreign.Ptr(Ptr)
 
 
-class IsActor t where
-  toPtr :: t -> Ptr ()
+class Actor t where
+  fromActor :: t -> Ptr t
+  toActor   :: Ptr t -> t
 
-actorSetSize       :: IsActor t => t -> Float -> Float -> IO ()
-actorSetSize t x y  = clutter_actor_set_size (toPtr t) x y
+actorSetSize       :: Actor t => t -> Float -> Float -> IO ()
+actorSetSize t x y  = clutter_actor_set_size (fromActor t) x y
 
 foreign import ccall "clutter_actor_set_size"
-  clutter_actor_set_size :: Ptr () -> Float -> Float -> IO ()
+  clutter_actor_set_size :: Ptr t -> Float -> Float -> IO ()
 
 
-actorShow          :: IsActor t => t -> IO ()
-actorShow t         = clutter_actor_show (toPtr t)
+actorShow          :: Actor t => t -> IO ()
+actorShow t         = clutter_actor_show (fromActor t)
 
 foreign import ccall "clutter_actor_show"
-  clutter_actor_show :: Ptr () -> IO ()
+  clutter_actor_show :: Ptr t -> IO ()
 
 
 
