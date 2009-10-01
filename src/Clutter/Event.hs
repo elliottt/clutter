@@ -15,15 +15,15 @@ data HandlerId = HID (FunPtr Callback) CULong
 newtype Event a = E (Ptr (Event a))
 
 signalConnect :: Actor t
-              => t -> EventName a -> (t -> Event a -> IO Bool)
+              => t -> EventName a -> (Event a -> IO Bool)
               -> IO HandlerId
 signalConnect t ev k = withCString ev $ \ str  -> do
   cbk <- mkCallback (wrapCallback k)
   HID cbk `fmap` g_signal_connect_data (castPtr (fromActor t)) str cbk
                    nullPtr nullPtr 0
 
-wrapCallback :: Actor a => (a -> Event e -> IO Bool) -> Callback
-wrapCallback f p1 p2 _ = f (toActor (castPtr p1)) (E (castPtr p2))
+wrapCallback :: (Event e -> IO Bool) -> Callback
+wrapCallback f _ p2 _ = f (E (castPtr p2))
 
 signalDisconnect :: Actor t => t -> HandlerId -> IO ()
 signalDisconnect t (HID cbk i) = do
@@ -46,3 +46,20 @@ foreign import ccall "g_signal_handler_disconnect"
   g_signal_handler_disconnect :: Ptr () -- object
                       -> CULong -- handler id
                       -> IO ()
+
+{-
+#enum ClutterEventType, CET\
+  , CLUTTER_NOTHING\
+  , CLUTTER_KEY_PRESS\
+  , CLUTTER_KEY_RELEASE\
+  , CLUTTER_MOTION\
+  , CLUTTER_ENTER\
+  , CLUTTER_LEAVE\
+  , CLUTTER_BUTTON_PRESS\
+  , CLUTTER_BUTTON_RELEASE\
+  , CLUTTER_SCROLL\
+  , CLUTTER_STAGE_STATE\
+  , CLUTTER_DESTROY_NOTIFY\
+  , CLUTTER_CLIENT_MESSAGE\
+  , CLUTTER_DELETE
+-}
