@@ -10,12 +10,10 @@ import Foreign.Marshal.Utils(with)
 import Clutter.Actor(Actor(..))
 import Clutter.Color
 
-newtype Stage = Stage { unStage :: Ptr Stage }
+newtype Stage = Stage { unStage :: Ptr () }
 
 instance Actor Stage where
   fromActor = unStage
-  toActor   = Stage
-
 
 foreign import ccall "clutter_stage_get_default"
   stageGetDefault :: IO Stage
