@@ -34,9 +34,9 @@ foreign import ccall "clutter_actor_show"
 onShow :: Actor a => a -> IO () -> IO HandlerId
 onShow t x = signalConnect (fromActor t) "show" (void0 x)
 
-onButtonPress :: Actor a => a -> (Float -> Float -> IO Bool) -> IO HandlerId
+onButtonPress :: Actor a => a -> (ButtonEvent -> IO Bool) -> IO HandlerId
 onButtonPress t g = signalConnect (fromActor t) "button-press-event"
-                  $ bool1 $ simpleButtonHandler g
+                  $ btnHandler g
 
 
 
