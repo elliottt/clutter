@@ -13,6 +13,7 @@ exposed-modules:
   Clutter.Event
   Clutter.Init
   Clutter.Stage
+  Clutter.Timeline
   Clutter.Utils
   Cogl
   Cogl.Color
