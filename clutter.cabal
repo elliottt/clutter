@@ -14,6 +14,8 @@ exposed-modules:
   Clutter.Init
   Clutter.Stage
   Clutter.Utils
+other-modules:
+  Clutter.Private
 
 extensions:
   ForeignFunctionInterface

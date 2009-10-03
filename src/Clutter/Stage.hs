@@ -7,7 +7,7 @@ module Clutter.Stage
 import Foreign.Ptr(Ptr)
 import Foreign.Marshal.Utils(with)
 
-import Clutter.Actor(Actor(..))
+import Clutter.Private(Actor(..))
 import Clutter.Color
 
 newtype Stage = Stage { unStage :: Ptr () }
