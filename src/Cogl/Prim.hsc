@@ -111,7 +111,7 @@ withCoordList coords f = loop [] 0 coords
   loop ps n ((x,y):cs) = loop (y:x:ps) (n+2) cs
   loop ps n []         = withArray (reverse ps) (\ptr -> f ptr n)
 
-foreign import ccall "cogl_path_polyine"
+foreign import ccall "cogl_path_polyline"
   cogl_path_polyline :: Ptr Float -> CInt -> IO ()
 
 -- | Constructs a series of straight line segments, starting from the first
