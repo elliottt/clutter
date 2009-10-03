@@ -1,10 +1,11 @@
 module Clutter.Actor
-  ( Actor(..)   -- XXX: define instances with care!
+  ( Actor
   , actorSetSize
   , actorShow
   -- signals
   , onShow
   , onButtonPress
+  , onButtonRelease
   , signalDisconnect
   ) where
 
@@ -12,10 +13,8 @@ module Clutter.Actor
 import Foreign.Ptr(Ptr)
 
 import Clutter.Utils
+import Clutter.Private
 
-
-class Actor t where
-  fromActor :: t -> Ptr ()
 
 actorSetSize       :: Actor t => t -> Float -> Float -> IO ()
 actorSetSize t x y  = clutter_actor_set_size (fromActor t) x y
@@ -33,9 +32,14 @@ foreign import ccall "clutter_actor_show"
 onShow :: Actor a => a -> IO () -> IO HandlerId
 onShow t x = signalConnect (fromActor t) "show" (void0 x)
 
-onButtonPress :: Actor a => a -> (Float -> Float -> IO Bool) -> IO HandlerId
+onButtonPress :: Actor a => a -> (ButtonEvent -> IO Bool) -> IO HandlerId
 onButtonPress t g = signalConnect (fromActor t) "button-press-event"
-                  $ bool1 $ simpleButtonEvent g
+                  $ bool1 $ \p -> g (BE p)
+
+onButtonRelease :: Actor a => a -> (ButtonEvent -> IO Bool) -> IO HandlerId
+onButtonRelease t g = signalConnect (fromActor t) "button-release-event"
+                    $ bool1 $ \p -> g (BE p)
+
 
 
 

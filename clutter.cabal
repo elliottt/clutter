@@ -17,6 +17,9 @@ exposed-modules:
   Cogl
   Cogl.Color
 
+other-modules:
+  Clutter.Private
+
 extensions:
   ForeignFunctionInterface
   DeriveDataTypeable
