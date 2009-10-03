@@ -4,6 +4,8 @@
 
 module Cogl.Texture (
     textureFromFile
+  , textureWidth
+  , textureHeight
 
   , CoglTextureFlags
   , textureNone
@@ -80,3 +82,15 @@ textureFromFile :: FilePath -> [CoglTextureFlags] -> CoglPixelFormat
                 -> IO CoglHandle
 textureFromFile path flags fmt =
   withCString path (\f -> cogl_texture_new_from_file f (mkFlags flags) fmt)
+
+foreign import ccall "cogl_texture_get_width"
+  cogl_texture_get_width :: CoglHandle -> IO Int
+
+textureWidth :: CoglHandle -> IO Int
+textureWidth h = fromIntegral `fmap` cogl_texture_get_width h
+
+foreign import ccall "cogl_texture_get_height"
+  cogl_texture_get_height :: CoglHandle -> IO Int
+
+textureHeight :: CoglHandle -> IO Int
+textureHeight h = fromIntegral `fmap` cogl_texture_get_height h
