@@ -18,9 +18,12 @@ module Cogl (
   , bufferBitColor
   , bufferBitDepth
   , bufferBitStencil
+
+  , module X
   ) where
 
-import Cogl.Color
+import Cogl.Color as X
+import Cogl.Prim  as X
 
 import Data.Bits (Bits((.|.)))
 import Foreign.C.Types

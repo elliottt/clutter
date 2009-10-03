@@ -16,6 +16,7 @@ exposed-modules:
   Clutter.Utils
   Cogl
   Cogl.Color
+  Cogl.Prim
 
 other-modules:
   Clutter.Private
