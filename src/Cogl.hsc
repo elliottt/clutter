@@ -23,11 +23,16 @@ module Cogl (
   , setSourceColor4b
   , setSourceColor4f
 
-  , module X
+  , module Cogl.Color
+  , module Cogl.Material
+  , module Cogl.Prim
+  , module Cogl.Texture
   ) where
 
-import Cogl.Color as X
-import Cogl.Prim  as X
+import Cogl.Color
+import Cogl.Material
+import Cogl.Prim
+import Cogl.Texture
 
 import Data.Bits (Bits((.|.)))
 import Data.Word (Word8)
