@@ -19,9 +19,11 @@ module Cogl (
   , bufferBitDepth
   , bufferBitStencil
 
+  , setSource
   , setSourceColor
   , setSourceColor4b
   , setSourceColor4f
+  , setSourceTexture
 
   , module Cogl.Color
   , module Cogl.Material
@@ -116,6 +118,9 @@ clear :: CoglColor -> [CoglBufferBit] -> IO ()
 clear c bs = cogl_clear c mask
   where mask = foldl (\z (CBB a) -> z .|. a) 0 bs
 
+foreign import ccall "cogl_set_source"
+  setSource :: CoglHandle -> IO ()
+
 foreign import ccall "cogl_set_source_color"
   setSourceColor :: CoglColor -> IO ()
 
@@ -124,3 +129,6 @@ foreign import ccall "cogl_set_source_color4ub"
 
 foreign import ccall "cogl_set_source_color4f"
   setSourceColor4f :: Float -> Float -> Float -> Float -> IO ()
+
+foreign import ccall "cogl_set_source_texture"
+  setSourceTexture :: CoglHandle -> IO ()
