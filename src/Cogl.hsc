@@ -19,6 +19,10 @@ module Cogl (
   , bufferBitDepth
   , bufferBitStencil
 
+  , setSourceColor
+  , setSourceColor4b
+  , setSourceColor4f
+
   , module X
   ) where
 
@@ -26,6 +30,7 @@ import Cogl.Color as X
 import Cogl.Prim  as X
 
 import Data.Bits (Bits((.|.)))
+import Data.Word (Word8)
 import Foreign.C.Types
 
 -- | Store the current model-view matrix from the matrix stack.  The matrix can
@@ -105,3 +110,12 @@ foreign import ccall "cogl_clear"
 clear :: CoglColor -> [CoglBufferBit] -> IO ()
 clear c bs = cogl_clear c mask
   where mask = foldl (\z (CBB a) -> z .|. a) 0 bs
+
+foreign import ccall "cogl_set_source_color"
+  setSourceColor :: CoglColor -> IO ()
+
+foreign import ccall "cogl_set_source_color4ub"
+  setSourceColor4b :: Word8 -> Word8 -> Word8 -> Word8 -> IO ()
+
+foreign import ccall "cogl_set_source_color4f"
+  setSourceColor4f :: Float -> Float -> Float -> Float -> IO ()
