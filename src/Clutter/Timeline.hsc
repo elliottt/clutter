@@ -23,7 +23,7 @@ import Foreign.C
 
 newtype Timeline = CT (Ptr ())
 
-foreign import ccall "clutter_tmeline_new"
+foreign import ccall "clutter_timeline_new"
   clutter_timeline_new :: CUInt -> IO Timeline
 
 -- | Create a new @Timeline@ with the specified duration.
