@@ -14,6 +14,8 @@ exposed-modules:
   Clutter.Init
   Clutter.Stage
   Clutter.Utils
+  Cogl
+  Cogl.Color
 
 extensions:
   ForeignFunctionInterface
