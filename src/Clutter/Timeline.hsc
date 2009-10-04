@@ -17,6 +17,8 @@ module Clutter.Timeline (
   , onCompleted
   , onMarkerReached
   , onNewFrame
+  , onPause
+  , onStart
 
     -- * Playback Control
   , startTimeline
@@ -98,6 +100,12 @@ onMarkerReached (T t) e k =
 onNewFrame :: Timeline -> (Int -> IO ()) -> IO HandlerId
 onNewFrame (T t) k =
   signalConnect t "new-frame" (castFunPtr `fmap` intWrap (k . fromIntegral))
+
+onPause :: Timeline -> IO () -> IO HandlerId
+onPause (T t) k = signalConnect t "paused" (castFunPtr `fmap` voidWrap k)
+
+onStart :: Timeline -> IO () -> IO HandlerId
+onStart (T t) k = signalConnect t "started" (castFunPtr `fmap` voidWrap k)
 
 -- | Start a @Timeline@.
 foreign import ccall "clutter_timeline_start"
