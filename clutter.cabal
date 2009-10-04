@@ -11,6 +11,7 @@ exposed-modules:
   Clutter.Actor
   Clutter.Actor.Rectangle
   Clutter.Color
+  Clutter.Container
   Clutter.Event
   Clutter.Init
   Clutter.Stage

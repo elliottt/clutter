@@ -15,11 +15,15 @@ module Clutter.Actor.Rectangle (
   ) where
 
 import Clutter.Color
+import Clutter.Private
 
 import Foreign
 import Foreign.C
 
 newtype Rectangle = R (Ptr ())
+
+instance Actor Rectangle where
+  fromActor (R p) = p
 
 -- | Creates a new 'Rectangle' shape.
 foreign import ccall "clutter_rectangle_new"

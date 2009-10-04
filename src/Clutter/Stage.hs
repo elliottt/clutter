@@ -7,13 +7,16 @@ module Clutter.Stage
 import Foreign.Ptr(Ptr)
 import Foreign.Marshal.Utils(with)
 
-import Clutter.Private(Actor(..))
+import Clutter.Private(Actor(..),Container(..))
 import Clutter.Color
 
 newtype Stage = Stage { unStage :: Ptr () }
 
 instance Actor Stage where
   fromActor = unStage
+
+instance Container Stage where
+  fromContainer = unStage
 
 foreign import ccall "clutter_stage_get_default"
   stageGetDefault :: IO Stage
