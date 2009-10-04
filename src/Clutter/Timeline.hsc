@@ -12,16 +12,23 @@ module Clutter.Timeline (
   , timelineForward
   , timelineBackward
 
+  , onNewFrame
+
   , startTimeline
   , pauseTimeline
   , stopTimeline
   , rewindTimeline
+  , setLoop
+
+  , getProgress
   ) where
+
+import Clutter.Utils
 
 import Foreign
 import Foreign.C
 
-newtype Timeline = CT (Ptr ())
+newtype Timeline = T (Ptr ())
 
 foreign import ccall "clutter_timeline_new"
   clutter_timeline_new :: CUInt -> IO Timeline
@@ -45,6 +52,15 @@ foreign import ccall "clutter_timeline_set_direction"
 foreign import ccall "clutter_timeline_get_direction"
   getTimelineDirection :: Timeline -> IO TimelineDirection
 
+type Factory a = a -> IO (FunPtr a)
+
+foreign import ccall "wrapper"
+  mkWrapper :: Factory (CInt -> IO ())
+
+onNewFrame :: Timeline -> (Int -> IO ()) -> IO HandlerId
+onNewFrame (T t) k =
+  signalConnect t "new-frame" (castFunPtr `fmap` mkWrapper (k . fromIntegral))
+
 
 -- | Start a @Timeline@.
 foreign import ccall "clutter_timeline_start"
@@ -63,3 +79,11 @@ foreign import ccall "clutter_timeline_stop"
 -- @timelineBackward@.
 foreign import ccall "clutter_timeline_rewind"
   rewindTimeline :: Timeline -> IO ()
+
+-- | Sets whether or not the @Timeline@ should loop.
+foreign import ccall "clutter_timeline_set_loop"
+  setLoop :: Timeline -> Bool -> IO ()
+
+-- | The position of the @Timeline@ in a [0,1] interval.
+foreign import ccall "clutter_timeline_get_progress"
+  getProgress :: Timeline -> IO Double
