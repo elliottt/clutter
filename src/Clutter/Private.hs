@@ -7,7 +7,7 @@ newtype ButtonEvent = BE { unBE :: Ptr () }
 
 -- | Types that are clutter actors.
 class Actor t where
-  fromActor :: t -> Ptr ()
+  withActor :: t -> (Ptr () -> IO a) -> IO a
 
 -- | Types that are clutter containers.
 class Container t where

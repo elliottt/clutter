@@ -36,7 +36,7 @@ import Clutter.Private
 --
 -- This function sets or unsets both the minimum and natural size.
 actorSetSize       :: Actor t => t -> Float -> Float -> IO ()
-actorSetSize t x y  = clutter_actor_set_size (fromActor t) x y
+actorSetSize t x y  = withActor t $ \p -> clutter_actor_set_size p x y
 
 foreign import ccall "clutter_actor_set_size"
   clutter_actor_set_size :: Ptr () -> Float -> Float -> IO ()
@@ -46,16 +46,17 @@ foreign import ccall "clutter_actor_set_size"
 -- manager and force a fixed position.
 actorGetSize       :: Actor t => t -> IO (Float,Float)
 actorGetSize t      =
+  withActor t $ \p ->
   with 0 $ \ x ->
   with 0 $ \ y -> do
-    clutter_actor_get_size (fromActor t) x y
+    clutter_actor_get_size p x y
     liftM2 (,) (peek x) (peek y)
 
 foreign import ccall "clutter_actor_get_size"
   clutter_actor_get_size :: Ptr () -> Ptr Float -> Ptr Float -> IO ()
 
 actorSetPosition   :: Actor t => t -> Float -> Float -> IO ()
-actorSetPosition t x y = clutter_actor_set_position (fromActor t) x y
+actorSetPosition t x y = withActor t $ \p -> clutter_actor_set_position p x y
 
 foreign import ccall "clutter_actor_set_position"
   clutter_actor_set_position :: Ptr () -> Float -> Float -> IO ()
@@ -66,9 +67,10 @@ foreign import ccall "clutter_actor_set_position"
 -- returns the actor's allocated position; otherwise, returns 0,0. 
 actorGetPosition   :: Actor t => t -> IO (Float,Float)
 actorGetPosition t  =
+  withActor t $ \p ->
   with 0 $ \ x ->
   with 0 $ \ y -> do
-    clutter_actor_get_position (fromActor t) x y
+    clutter_actor_get_position p x y
     liftM2 (,) (peek x) (peek y)
 
 foreign import ccall "clutter_actor_get_position"
@@ -76,40 +78,40 @@ foreign import ccall "clutter_actor_get_position"
 
 -- | Show an actor.
 actorShow          :: Actor t => t -> IO ()
-actorShow t         = clutter_actor_show (fromActor t)
+actorShow t         = withActor t clutter_actor_show
 
 foreign import ccall "clutter_actor_show"
   clutter_actor_show :: Ptr () -> IO ()
 
 -- | Set if the actor should be receiving events.
 actorSetReactive   :: Actor t => t -> Bool -> IO ()
-actorSetReactive t  = clutter_actor_set_reactive (fromActor t)
+actorSetReactive t b  = withActor t $ \p -> clutter_actor_set_reactive p b
 
 foreign import ccall "clutter_actor_set_reactive"
   clutter_actor_set_reactive :: Ptr () -> Bool -> IO ()
 
 -- | Checks if the actor receives events.
 actorGetReactive   :: Actor t => t -> IO Bool
-actorGetReactive t = clutter_actor_get_reactive (fromActor t)
+actorGetReactive t = withActor t clutter_actor_get_reactive
 
 foreign import ccall "clutter_actor_get_reactive"
   clutter_actor_get_reactive :: Ptr () -> IO Bool
 
 -- | Run the given IO action when the actor is shown.
 onShow :: Actor a => a -> IO () -> IO HandlerId
-onShow t x = signalConnect (fromActor t) "show" (void0 x)
+onShow t x = withActor t $ \p -> signalConnect p "show" (void0 x)
 
 -- | Run the given action when a mouse button is pressed on the actor.
 -- The boolean returned by the handler indicates if the event was handled.
 onButtonPress :: Actor a => a -> (ButtonEvent -> IO Bool) -> IO HandlerId
-onButtonPress t g = signalConnect (fromActor t) "button-press-event"
-                  $ bool1 $ \p -> g (BE p)
+onButtonPress t g = withActor t $ \p -> signalConnect p "button-press-event"
+                  $ bool1 $ \pe -> g (BE pe)
 
 -- | Run the given action when a mouse button is released on the actor.
 -- The boolean returned by the handler indicates if the event was handled.
 onButtonRelease :: Actor a => a -> (ButtonEvent -> IO Bool) -> IO HandlerId
-onButtonRelease t g = signalConnect (fromActor t) "button-release-event"
-                    $ bool1 $ \p -> g (BE p)
+onButtonRelease t g = withActor t $ \p -> signalConnect p "button-release-event"
+                    $ bool1 $ \pe -> g (BE pe)
 
 
 

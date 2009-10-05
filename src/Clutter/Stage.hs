@@ -13,7 +13,7 @@ import Clutter.Color
 newtype Stage = Stage { unStage :: Ptr () }
 
 instance Actor Stage where
-  fromActor = unStage
+  withActor x k = k (unStage x)
 
 instance Container Stage where
   fromContainer = unStage
