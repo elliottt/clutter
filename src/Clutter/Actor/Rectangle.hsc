@@ -16,25 +16,30 @@ module Clutter.Actor.Rectangle (
 
 import Clutter.Color
 import Clutter.Private
+import Clutter.GLib
 
 import Foreign
 import Foreign.C
 
-newtype Rectangle = R (Ptr ())
+newtype Rectangle = R (ForeignPtr ())
 
 instance Actor Rectangle where
-  withActor (R p) k = k p
+  withActor (R p) k = withForeignPtr p k
 
 -- | Creates a new 'Rectangle' shape.
 foreign import ccall "clutter_rectangle_new"
-  newRectangle :: IO Rectangle
+  clutter_rectangle_new :: IO (Ptr ())
+
+newRectangle :: IO Rectangle
+newRectangle = R `fmap` (newGObject =<< clutter_rectangle_new)
 
 foreign import ccall "clutter_rectangle_new_with_color"
-  clutter_rectangle_new_with_color :: Ptr Color -> IO Rectangle
+  clutter_rectangle_new_with_color :: Ptr Color -> IO (Ptr ())
 
 -- | Creates a new 'Rectangle' shape of the given 'Color'.
 newRectangleWithColor :: Color -> IO Rectangle
-newRectangleWithColor c = with c clutter_rectangle_new_with_color
+newRectangleWithColor c =
+  R `fmap` (newGObject =<<  with c clutter_rectangle_new_with_color)
 
 foreign import ccall "clutter_rectangle_get_color"
   clutter_rectangle_get_color :: Ptr () -> Ptr Color -> IO ()

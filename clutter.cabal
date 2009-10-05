@@ -25,6 +25,7 @@ exposed-modules:
 
 other-modules:
   Clutter.Private
+  Clutter.GLib
 
 extensions:
   ForeignFunctionInterface
@@ -32,4 +33,5 @@ extensions:
 
 GHC-options:
   -O2 -Wall
+
 
