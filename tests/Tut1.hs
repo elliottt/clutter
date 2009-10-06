@@ -4,8 +4,8 @@ import System.IO
 
 main = application $
   do stage <- stageGetDefault
-     actorSetSize stage 200 200
-     stageSetColor stage (Clutter.Color 255 0 0 0)
+     setSize stage 200 200
+     stageSetColor stage (Color 255 0 0 0)
      actorShow stage
 
      fixIO $ \hid ->stage `onButtonPress` \ev ->

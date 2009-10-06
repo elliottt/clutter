@@ -6,6 +6,8 @@ module Clutter.Container
   ( addActor
   , removeActor
   , findByName
+  , SomeActor
+  , Container
   ) where
 
 import Clutter.Private

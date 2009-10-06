@@ -8,12 +8,12 @@ module Clutter.Actor
     Actor
   , actorShow
   -- ** Properties
-  , actorSetSize
-  , actorGetSize
-  , actorSetPosition
-  , actorGetPosition
-  , actorSetReactive
-  , actorGetReactive
+  , setSize
+  , getSize
+  , setPosition
+  , getPosition
+  , setReactive
+  , getReactive
 
   , setName
   , getName
@@ -24,6 +24,7 @@ module Clutter.Actor
   , getRotation
 
   -- ** Signals
+  , HandlerId
   , onShow
   , onButtonPress
   , onButtonRelease
@@ -69,8 +70,8 @@ setName a s = withActor a   $ \pa ->
 -- request instead of overriding it, i.e. you can "unset" the size with -1.
 --
 -- This function sets or unsets both the minimum and natural size.
-actorSetSize       :: Actor t => t -> Float -> Float -> IO ()
-actorSetSize t x y  = withActor t $ \p -> clutter_actor_set_size p x y
+setSize       :: Actor t => t -> Float -> Float -> IO ()
+setSize t x y  = withActor t $ \p -> clutter_actor_set_size p x y
 
 foreign import ccall "clutter_actor_set_size"
   clutter_actor_set_size :: Ptr () -> Float -> Float -> IO ()
@@ -78,8 +79,8 @@ foreign import ccall "clutter_actor_set_size"
 -- | Sets the actor's fixed position in pixels relative to any parent actor.
 -- If a layout manager is in use, this position will override the layout
 -- manager and force a fixed position.
-actorGetSize       :: Actor t => t -> IO (Float,Float)
-actorGetSize t      =
+getSize       :: Actor t => t -> IO (Float,Float)
+getSize t      =
   withActor t $ \p ->
   with 0 $ \ x ->
   with 0 $ \ y -> do
@@ -89,8 +90,8 @@ actorGetSize t      =
 foreign import ccall "clutter_actor_get_size"
   clutter_actor_get_size :: Ptr () -> Ptr Float -> Ptr Float -> IO ()
 
-actorSetPosition   :: Actor t => t -> Float -> Float -> IO ()
-actorSetPosition t x y = withActor t $ \p -> clutter_actor_set_position p x y
+setPosition   :: Actor t => t -> Float -> Float -> IO ()
+setPosition t x y = withActor t $ \p -> clutter_actor_set_position p x y
 
 foreign import ccall "clutter_actor_set_position"
   clutter_actor_set_position :: Ptr () -> Float -> Float -> IO ()
@@ -99,8 +100,8 @@ foreign import ccall "clutter_actor_set_position"
 -- is, prior to any transformations. Retrieves the fixed position of an actor
 -- in -- pixels, if one has been set; otherwise, if the allocation is valid,
 -- returns the actor's allocated position; otherwise, returns 0,0. 
-actorGetPosition   :: Actor t => t -> IO (Float,Float)
-actorGetPosition t  =
+getPosition   :: Actor t => t -> IO (Float,Float)
+getPosition t  =
   withActor t $ \p ->
   with 0 $ \ x ->
   with 0 $ \ y -> do
@@ -118,15 +119,15 @@ foreign import ccall "clutter_actor_show"
   clutter_actor_show :: Ptr () -> IO ()
 
 -- | Set if the actor should be receiving events.
-actorSetReactive   :: Actor t => t -> Bool -> IO ()
-actorSetReactive t b  = withActor t $ \p -> clutter_actor_set_reactive p b
+setReactive   :: Actor t => t -> Bool -> IO ()
+setReactive t b  = withActor t $ \p -> clutter_actor_set_reactive p b
 
 foreign import ccall "clutter_actor_set_reactive"
   clutter_actor_set_reactive :: Ptr () -> Bool -> IO ()
 
 -- | Checks if the actor receives events.
-actorGetReactive   :: Actor t => t -> IO Bool
-actorGetReactive t = withActor t clutter_actor_get_reactive
+getReactive   :: Actor t => t -> IO Bool
+getReactive t = withActor t clutter_actor_get_reactive
 
 foreign import ccall "clutter_actor_get_reactive"
   clutter_actor_get_reactive :: Ptr () -> IO Bool

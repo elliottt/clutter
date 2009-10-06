@@ -2,8 +2,8 @@ import Clutter
 
 rectangle s =
   do r <- newRectangleWithColor (Color 0xff 0 0 0x99)
-     actorSetSize r 100 100
-     actorSetPosition r 20 20
+     setSize r 100 100
+     setPosition r 20 20
      r `setName` "rectangle"
      setRectangleBorderWidth r 2
      setRectangleBorderColor r (Color 0xff 0xff 0xff 0x99)
@@ -11,7 +11,7 @@ rectangle s =
 
 main = application $
   do stage <- stageGetDefault
-     actorSetSize stage 640 480
+     setSize stage 640 480
      stageSetColor stage (Clutter.Color 0 0 0 0xff)
      rectangle stage
      actorShow stage
