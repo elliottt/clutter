@@ -1,3 +1,7 @@
+{-# LANGUAGE ForeignFunctionInterface #-}
+
+#include <clutter/clutter.h>
+
 module Clutter.Actor
   (
   -- ** General
@@ -10,19 +14,28 @@ module Clutter.Actor
   , actorGetPosition
   , actorSetReactive
   , actorGetReactive
+
+  , RotateAxis
+  , xAxis, yAxis, zAxis
+  , setRotation
+  , getRotation
+
   -- ** Signals
   , onShow
   , onButtonPress
   , onButtonRelease
+  , onPaint
+  , afterPaint
   , signalDisconnect
   ) where
 
 
 import Control.Monad (liftM2)
 import Foreign(Storable(peek),with)
+import Foreign.C.Types
 import Foreign.Ptr(Ptr)
 
-import Clutter.Utils
+import Clutter.GLib
 import Clutter.Private
 
 
@@ -97,23 +110,62 @@ actorGetReactive t = withActor t clutter_actor_get_reactive
 foreign import ccall "clutter_actor_get_reactive"
   clutter_actor_get_reactive :: Ptr () -> IO Bool
 
+newtype RotateAxis = RA CInt deriving Eq
+
+#enum RotateAxis, RA\
+  , xAxis = CLUTTER_X_AXIS\
+  , yAxis = CLUTTER_Y_AXIS\
+  , zAxis = CLUTTER_Z_AXIS
+
+foreign import ccall "clutter_actor_set_rotation"
+  clutter_actor_set_rotation :: Ptr () -> CInt -> Double -> Float -> Float
+                             -> Float -> IO ()
+
+setRotation :: Actor a
+            => a -> RotateAxis -> Double -> Float -> Float -> Float -> IO ()
+setRotation t (RA r) angle x y z = withActor t $ \p ->
+  clutter_actor_set_rotation p r angle x y z
+
+foreign import ccall "clutter_actor_get_rotation"
+  clutter_actor_get_rotation :: Ptr () -> CInt -> Ptr Float -> Ptr Float
+                             -> Ptr Float -> IO Double
+
+getRotation :: Actor a
+            => a -> RotateAxis -> IO (Double,Float,Float,Float)
+getRotation a (RA r) =
+  withActor a $ \p  ->
+  with      0 $ \xp ->
+  with      0 $ \yp ->
+  with      0 $ \zp -> do
+    d <- clutter_actor_get_rotation p r xp yp zp
+    x <- peek xp
+    y <- peek yp
+    z <- peek zp
+    return (d,x,y,z)
+
 -- | Run the given IO action when the actor is shown.
 onShow :: Actor a => a -> IO () -> IO HandlerId
-onShow t x = withActor t $ \p -> signalConnect p "show" (void0 x)
+onShow t x = withActor t $ \p -> signalConnect p "show" (void x)
 
 -- | Run the given action when a mouse button is pressed on the actor.
 -- The boolean returned by the handler indicates if the event was handled.
 onButtonPress :: Actor a => a -> (ButtonEvent -> IO Bool) -> IO HandlerId
 onButtonPress t g = withActor t $ \p -> signalConnect p "button-press-event"
-                  $ bool1 $ \pe -> g (BE pe)
+                  $ ptr_bool $ \pe -> g (BE pe)
 
 -- | Run the given action when a mouse button is released on the actor.
 -- The boolean returned by the handler indicates if the event was handled.
 onButtonRelease :: Actor a => a -> (ButtonEvent -> IO Bool) -> IO HandlerId
 onButtonRelease t g = withActor t $ \p -> signalConnect p "button-release-event"
-                    $ bool1 $ \pe -> g (BE pe)
+                    $ ptr_bool $ \pe -> g (BE pe)
 
 
+-- | The paint signal is emitted each time an actor is being painted.
+onPaint :: Actor a => a -> IO () -> IO HandlerId
+onPaint t x = withActor t $ \p -> signalConnect p "paint" (void x)
 
 
+-- | The paint signal is emitted each time an actor is being painted.
+afterPaint :: Actor a => a -> IO () -> IO HandlerId
+afterPaint t x = withActor t $ \p -> signalConnectAfter p "paint" (void x)
 

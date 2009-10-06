@@ -17,6 +17,7 @@ module Clutter.Timeline (
   , onCompleted
   , onMarkerReached
   , onNewFrame
+  , afterNewFrame
   , onPause
   , onStart
 
@@ -35,9 +36,9 @@ module Clutter.Timeline (
   , advanceToMarker
   ) where
 
-import Clutter.Utils
+import Clutter.GLib
 
-import Foreign
+import Foreign hiding (void)
 import Foreign.C
 
 newtype Timeline = T (Ptr ())
@@ -64,22 +65,11 @@ foreign import ccall "clutter_timeline_set_direction"
 foreign import ccall "clutter_timeline_get_direction"
   getTimelineDirection :: Timeline -> IO TimelineDirection
 
-type Factory a = a -> IO (FunPtr a)
-
-foreign import ccall "wrapper"
-  intWrap :: Factory (CInt -> IO ())
-
-foreign import ccall "wrapper"
-  voidWrap :: Factory (IO ())
-
-foreign import ccall "wrapper"
-  markerWrap :: Factory (CString -> CInt -> IO ())
-
 -- | The completed event fires when the 'Timeline' reaches the number of frames
 -- specified by the num-frames property.
 onCompleted :: Timeline -> IO () -> IO HandlerId
 onCompleted (T t) k =
-  signalConnect t "completed" (castFunPtr `fmap` voidWrap k)
+  signalConnect t "completed" (void k)
 
 -- | The marker-reached signal is emitted each time the 'Timeline' reaches a
 -- marker set with 'setMarker'.  The string passed is the name of the marker, or
@@ -87,25 +77,24 @@ onCompleted (T t) k =
 onMarkerReached :: Timeline -> String -> (String -> Int -> IO ())
                 -> IO HandlerId
 onMarkerReached (T t) e k =
-  signalConnect t evt (castFunPtr `fmap` markerWrap k')
+  signalConnect t evt (string_int_void k)
   where
-  k' str msec = do
-    l <- peekCString str
-    k l (fromIntegral msec)
   evt | null e    = "marker-reached"
       | otherwise = "marker-reached::" ++ e
 
 -- | The new-frame event is emitted before each frame is drawn, to give
 -- animations a chance to update the scene.
 onNewFrame :: Timeline -> (Int -> IO ()) -> IO HandlerId
-onNewFrame (T t) k =
-  signalConnect t "new-frame" (castFunPtr `fmap` intWrap (k . fromIntegral))
+onNewFrame (T t) k = signalConnect t "new-frame" (int_void k)
+
+afterNewFrame :: Timeline -> (Int -> IO ()) -> IO HandlerId
+afterNewFrame (T t) k = signalConnectAfter t "new-frame" (int_void k)
 
 onPause :: Timeline -> IO () -> IO HandlerId
-onPause (T t) k = signalConnect t "paused" (castFunPtr `fmap` voidWrap k)
+onPause (T t) k = signalConnect t "paused" (void k)
 
 onStart :: Timeline -> IO () -> IO HandlerId
-onStart (T t) k = signalConnect t "started" (castFunPtr `fmap` voidWrap k)
+onStart (T t) k = signalConnect t "started" (void k)
 
 -- | Start a 'Timeline'.
 foreign import ccall "clutter_timeline_start"

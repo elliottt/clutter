@@ -23,10 +23,14 @@ module Cogl.Prim (
   , fillPreserve
   , stroke
   , strokePreserve
+  , fillRectangle
   ) where
 
 import Foreign
 import Foreign.C.Types
+
+foreign import ccall "cogl_rectangle"
+  fillRectangle :: Float -> Float -> Float -> Float -> IO ()
 
 -- | Clears the current path and starts a new one.
 foreign import ccall "cogl_path_new"
