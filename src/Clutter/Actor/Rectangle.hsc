@@ -12,10 +12,11 @@ module Clutter.Actor.Rectangle (
   , setRectangleBorderColor
   , getRectangleBorderWidth
   , setRectangleBorderWidth
+  , toRectangle
   ) where
 
 import Clutter.Color
-import Clutter.Private(ForeignObject(..),withPtr,Actor)
+import Clutter.Private(SomeActor,ForeignObject(..),withPtr,Actor,withActor)
 import Clutter.GLib
 
 import Foreign
@@ -25,6 +26,17 @@ newtype Rectangle = R (ForeignPtr ())
 
 instance ForeignObject Rectangle where rawPtr (R x) = x
 instance Actor Rectangle
+
+toRectangle :: SomeActor -> IO (Maybe Rectangle)
+toRectangle p = do t  <- withActor p getType
+                   ts <- clutter_rectangle_get_type
+                   return (if t == ts then Just (R (rawPtr p))
+                                      else Nothing)
+
+foreign import ccall "clutter_rectangle_get_type"
+  clutter_rectangle_get_type :: IO GType
+
+
 
 -- | Creates a new 'Rectangle' shape.
 foreign import ccall "clutter_rectangle_new"

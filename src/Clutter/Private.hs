@@ -23,3 +23,10 @@ withActor = withPtr
 
 withContainer :: Container c => c -> (Ptr () -> IO b) -> IO b
 withContainer = withPtr
+
+
+newtype SomeActor = SomeActor (ForeignPtr ())
+
+instance ForeignObject SomeActor where rawPtr (SomeActor p) = p 
+instance Actor SomeActor
+

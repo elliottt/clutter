@@ -10,6 +10,7 @@ import Foreign.Marshal.Utils(with)
 
 import Clutter.Private
 import Clutter.Color
+import Clutter.GLib
 
 newtype Stage = Stage (ForeignPtr ())
 
@@ -29,4 +30,14 @@ stageSetColor s c  = withPtr s $ \p -> with c (clutter_stage_set_color p)
 
 foreign import ccall "clutter_stage_set_color"
   clutter_stage_set_color :: Ptr () -> Ptr Color -> IO ()
+
+
+toStage :: SomeActor -> IO (Maybe Stage)
+toStage p = do t <- withActor p getType
+               ts <- clutter_stage_get_type
+               return (if t == ts then Just (Stage (rawPtr p))
+                                  else Nothing)
+
+foreign import ccall "clutter_stage_get_type"
+  clutter_stage_get_type :: IO GType
 

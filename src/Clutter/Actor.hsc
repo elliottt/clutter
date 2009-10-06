@@ -15,6 +15,9 @@ module Clutter.Actor
   , actorSetReactive
   , actorGetReactive
 
+  , setName
+  , getName
+
   , RotateAxis
   , xAxis, yAxis, zAxis
   , setRotation
@@ -33,10 +36,28 @@ module Clutter.Actor
 import Control.Monad (liftM2)
 import Foreign(Storable(peek),with)
 import Foreign.C.Types
+import Foreign.C.String
 import Foreign.Ptr(Ptr)
 
 import Clutter.GLib
 import Clutter.Private(ButtonEvent(..),Actor,withActor)
+
+
+foreign import ccall "clutter_actor_get_name"
+  clutter_actor_get_name :: Ptr () -> IO CString
+
+getName :: Actor a => a -> IO String
+getName a = withActor a $ \pa -> peekCString =<< clutter_actor_get_name pa
+
+
+foreign import ccall "clutter_actor_set_name"
+  clutter_actor_set_name :: Ptr () -> CString -> IO ()
+
+setName :: Actor a => a -> String -> IO ()
+setName a s = withActor a   $ \pa ->
+              withCString s $ \ps -> clutter_actor_set_name pa ps
+
+
 
 
 -- | Sets the actor's size request in pixels.
