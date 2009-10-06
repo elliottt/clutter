@@ -9,18 +9,20 @@ module Clutter.Container (
 
 import Clutter.Private
 
-import Foreign
+import Foreign.Ptr(Ptr)
 
 foreign import ccall "clutter_container_add_actor"
   clutter_container_add_actor :: Ptr () -> Ptr () -> IO ()
 
 addActor :: (Container c, Actor t) => c -> t -> IO ()
-addActor c t = withActor t $ \p ->
-                clutter_container_add_actor (fromContainer c) p
+addActor c a = withContainer c $ \pc ->
+               withActor a     $ \pa ->
+               clutter_container_add_actor pc pa
 
 foreign import ccall "clutter_container_remove_actor"
   clutter_container_remove_actor :: Ptr () -> Ptr () -> IO ()
 
-removeActor :: (Container c, Actor t) => c -> t -> IO ()
-removeActor c t = withActor t $ \p ->
-                   clutter_container_remove_actor (fromContainer c) p
+removeActor :: (Container c, Actor a) => c -> a -> IO ()
+removeActor c a = withContainer c $ \pc ->
+                  withActor a     $ \pa ->
+                  clutter_container_remove_actor pc pa
