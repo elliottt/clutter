@@ -8,7 +8,12 @@ main  = application $ do
   stageSetColor stage (Color 0 0 0 0xff)
   actorSetSize stage 320 200
 
-  rect <- newRectangleWithColor (Color 0xff 0x90 0x90 0xff)
+  rect1 <- newRectangleWithColor (Color 0x40 0x30 0xff 0x90)
+  actorSetSize rect1 100 100
+  actorSetPosition rect1 50 50
+  stage `addActor` rect1
+
+  rect <- newRectangleWithColor (Color 0x40 0xff 0x90 0x90)
   actorSetSize rect 100 100
   actorSetPosition rect 100 100
   actorSetReactive rect True
