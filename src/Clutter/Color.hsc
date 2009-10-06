@@ -11,6 +11,9 @@ data Color = Color { red   :: !Word8
                    , alpha :: !Word8
                    }
 
+defaultColor :: Color
+defaultColor = Color 0 0 0 0
+
 instance Storable Color where
   sizeOf _    = 4
   alignment _ = 4
@@ -23,3 +26,8 @@ instance Storable Color where
                    (#poke ClutterColor, green)  p (green c)
                    (#poke ClutterColor, blue)   p (blue c)
                    (#poke ClutterColor, alpha)  p (alpha c)
+
+class HasColor t where
+  setColor :: t -> Color -> IO ()
+  getColor :: t -> IO Color
+

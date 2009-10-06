@@ -12,7 +12,7 @@ rectangle s =
 main = application $
   do stage <- stageGetDefault
      setSize stage 640 480
-     stageSetColor stage (Clutter.Color 0 0 0 0xff)
+     setColor stage (Clutter.Color 0 0 0 0xff)
      rectangle stage
      actorShow stage
      mb <- findByName stage "rectangle"

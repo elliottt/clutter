@@ -5,7 +5,7 @@ import Cogl
 main :: IO ()
 main  = application $ do
   stage <- stageGetDefault
-  stageSetColor stage (Color 0 0 0 0xff)
+  setColor stage (Color 0 0 0 0xff)
   setSize stage 320 200
 
   rect1 <- newRectangleWithColor (Color 0x40 0x30 0xff 0x90)

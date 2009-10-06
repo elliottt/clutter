@@ -1,11 +1,13 @@
 module Clutter.Stage
   ( Stage
   , stageGetDefault
-  , stageSetColor
+  , HasColor(..)
+  , toStage
   ) where
 
 import Foreign.Ptr(Ptr)
-import Foreign.ForeignPtr(ForeignPtr, newForeignPtr_, withForeignPtr)
+import Foreign.ForeignPtr(ForeignPtr, newForeignPtr_)
+import Foreign.Storable(peek)
 import Foreign.Marshal.Utils(with)
 
 import Clutter.Private
@@ -25,12 +27,18 @@ stageGetDefault = Stage `fmap` (newForeignPtr_ =<< clutter_stage_get_default)
 foreign import ccall "clutter_stage_get_default"
   clutter_stage_get_default :: IO (Ptr ())
 
-stageSetColor :: Stage -> Color -> IO ()
-stageSetColor s c  = withPtr s $ \p -> with c (clutter_stage_set_color p)
+instance HasColor Stage where
+  setColor s c = withPtr s $ \p -> with c (clutter_stage_set_color p)
+  getColor s   = withPtr s        $ \sp ->
+                with defaultColor $ \cp ->
+                  do clutter_stage_get_color sp cp
+                     peek cp
 
 foreign import ccall "clutter_stage_set_color"
   clutter_stage_set_color :: Ptr () -> Ptr Color -> IO ()
 
+foreign import ccall "clutter_stage_set_color"
+  clutter_stage_get_color :: Ptr () -> Ptr Color -> IO ()
 
 toStage :: SomeActor -> IO (Maybe Stage)
 toStage p = do t <- withActor p getType
