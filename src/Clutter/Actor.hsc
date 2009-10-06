@@ -36,7 +36,7 @@ import Foreign.C.Types
 import Foreign.Ptr(Ptr)
 
 import Clutter.GLib
-import Clutter.Private
+import Clutter.Private(ButtonEvent(..),Actor,withActor)
 
 
 -- | Sets the actor's size request in pixels.

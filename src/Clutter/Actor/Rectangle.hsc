@@ -15,7 +15,7 @@ module Clutter.Actor.Rectangle (
   ) where
 
 import Clutter.Color
-import Clutter.Private
+import Clutter.Private(ForeignObject(..),withPtr,Actor)
 import Clutter.GLib
 
 import Foreign
@@ -23,8 +23,8 @@ import Foreign.C
 
 newtype Rectangle = R (ForeignPtr ())
 
-instance Actor Rectangle where
-  withActor (R p) k = withForeignPtr p k
+instance ForeignObject Rectangle where rawPtr (R x) = x
+instance Actor Rectangle
 
 -- | Creates a new 'Rectangle' shape.
 foreign import ccall "clutter_rectangle_new"
@@ -47,7 +47,7 @@ foreign import ccall "clutter_rectangle_get_color"
 -- | Retrieve the 'Color' of the 'Rectangle'.
 getRectangleColor :: Rectangle -> IO Color
 getRectangleColor r = with (Color 0 0 0 0) $ \c ->
-                      withActor r $ \p ->
+                      withPtr r $ \p ->
   do clutter_rectangle_get_color p c
      peek c
 
@@ -56,7 +56,7 @@ foreign import ccall "clutter_rectangle_set_color"
 
 -- | Set the color of the 'Rectangle' to the given 'Color'
 setRectangleColor :: Rectangle -> Color -> IO ()
-setRectangleColor r c = withActor r $ \p ->
+setRectangleColor r c = withPtr r $ \p ->
                         with c (clutter_rectangle_set_color p)
 
 foreign import ccall "clutter_rectangle_get_border_color"
@@ -64,7 +64,7 @@ foreign import ccall "clutter_rectangle_get_border_color"
 
 -- | Gets the 'Color' of the border used by the 'Rectangle'.
 getRectangleBorderColor :: Rectangle -> IO Color
-getRectangleBorderColor r = withActor r $ \p ->
+getRectangleBorderColor r = withPtr r $ \p ->
                             with (Color 0 0 0 0) $ \c -> do
   clutter_rectangle_get_border_color p c
   peek c
@@ -74,7 +74,7 @@ foreign import ccall "clutter_rectangle_set_border_color"
 
 -- | Sets the 'Color' of the border used by the 'Rectangle'.
 setRectangleBorderColor :: Rectangle -> Color -> IO ()
-setRectangleBorderColor r c = withActor r $ \p ->
+setRectangleBorderColor r c = withPtr r $ \p ->
                               with c (clutter_rectangle_set_border_color p)
 
 foreign import ccall "clutter_rectangle_get_border_width"
@@ -83,7 +83,7 @@ foreign import ccall "clutter_rectangle_get_border_width"
 -- | Get the width of the border used by 'Rectangle'.
 getRectangleBorderWidth :: Rectangle -> IO Int
 getRectangleBorderWidth r =
-  withActor r $ \p ->
+  withPtr r $ \p ->
   fromIntegral `fmap` clutter_rectangle_get_border_width p
 
 foreign import ccall "clutter_rectangle_set_border_width"
@@ -92,7 +92,7 @@ foreign import ccall "clutter_rectangle_set_border_width"
 -- | Set the width of the border used by 'Rectangle'.
 setRectangleBorderWidth :: Rectangle -> Int -> IO ()
 setRectangleBorderWidth r w =
-  withActor r $ \p ->
+  withPtr r $ \p ->
   clutter_rectangle_set_border_width p (fromIntegral w)
 
 

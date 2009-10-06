@@ -20,7 +20,7 @@ import Foreign.Storable(peekByteOff)
 import Data.Word
 import Data.Bits
 
-import Clutter.Private(Actor(..),ButtonEvent(..))
+import Clutter.Private
 
 #include <clutter/clutter.h>
 
@@ -47,7 +47,7 @@ btnButton      :: ButtonEvent -> IO Word
 btnButton e     = do x <- (#peek ClutterButtonEvent, button) (unBE e)
                      return (fromIntegral (x :: Word32))
 
--- | What modifiers were pressed.
+-- | What modifiers were pressed when the event occured.
 btnModifiers   :: ButtonEvent -> IO Modifiers
 btnModifiers e  = do x <- (#peek ClutterButtonEvent, modifier_state) (unBE e)
                      return (M x)
