@@ -6,7 +6,6 @@ module Clutter.Actor.Rectangle (
     Rectangle
   , newRectangle
   , newRectangleWithColor
-  , HasColor(..)
   , getBorderColor
   , setBorderColor
   , getBorderWidth

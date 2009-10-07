@@ -8,7 +8,7 @@ module Clutter.Actor.Text
   ) where
 
 #include <clutter/clutter.h>
-import Clutter.Color(Color)
+import Clutter.Color
 import Clutter.Private
 import Clutter.GLib
 
@@ -52,5 +52,19 @@ newText (Font f) s =
   withCString f $ \fp ->
   withCString s $ \sp ->
     T `fmap` (newGObject =<< clutter_text_new_with_text fp sp)
+
+
+instance HasColor Text where
+  setColor r c = withPtr r $ \p -> with c (clutter_text_set_color p)
+  getColor r   = with defaultColor $ \c ->
+                 withPtr r $ \p ->
+                   do clutter_text_get_color p c
+                      peek c
+
+foreign import ccall "clutter_text_get_color"
+  clutter_text_get_color :: Ptr () -> Ptr Color -> IO ()
+
+foreign import ccall "clutter_text_set_color"
+  clutter_text_set_color :: Ptr () -> Ptr Color -> IO ()
 
 
