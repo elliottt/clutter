@@ -11,7 +11,6 @@ module Clutter.Container
   ) where
 
 import Clutter.Private
-import Clutter.GLib(newGObject)
 
 import Foreign.Ptr(Ptr,nullPtr)
 import Foreign.C.String(CString,withCString)
@@ -38,7 +37,7 @@ findByName c s = withContainer c $ \pc ->
                  do pa <- clutter_container_find_child_by_name pc ps
                     if pa == nullPtr
                       then return Nothing
-                      else (Just . SomeActor) `fmap` newGObject pa
+                      else Just `fmap` someActor pa
 
 
 foreign import ccall "clutter_container_find_child_by_name"

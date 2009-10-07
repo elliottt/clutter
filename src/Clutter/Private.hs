@@ -2,6 +2,7 @@ module Clutter.Private where
 
 import Foreign.Ptr(Ptr)
 import Foreign.ForeignPtr(ForeignPtr,withForeignPtr)
+import Clutter.GLib
 
 -- | A mouse button event.
 newtype ButtonEvent = BE { unBE :: Ptr () }
@@ -26,6 +27,9 @@ withContainer = withPtr
 
 
 newtype SomeActor = SomeActor (ForeignPtr ())
+
+someActor :: Ptr () -> IO SomeActor
+someActor p = SomeActor `fmap` newGObject p
 
 instance ForeignObject SomeActor where rawPtr (SomeActor p) = p 
 instance Actor SomeActor
