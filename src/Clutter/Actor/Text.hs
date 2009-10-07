@@ -62,7 +62,8 @@ module Clutter.Actor.Text
   , setFont
   , getFont
 
-  , setPasswordChar
+  , setPassword
+  , setNotPassword
   , getPasswordChar
 
   , setCursorColor
@@ -211,10 +212,16 @@ foreign import ccall "clutter_text_set_password_char"
 foreign import ccall "clutter_text_get_password_char"
   clutter_text_get_password_char :: Ptr () -> IO Word32
 
-setPasswordChar :: Text -> Char -> IO ()
-setPasswordChar t c =
+setPassword :: Text -> Char -> IO ()
+setPassword t c =
   withPtr t $ \pt ->
   clutter_text_set_password_char pt (fromIntegral (fromEnum c))
+
+setNotPassword :: Text -> IO ()
+setNotPassword t =
+  withPtr t $ \pt -> clutter_text_set_password_char pt 0
+
+
 
 getPasswordChar :: Text -> IO Char
 getPasswordChar t = withPtr t $ \p ->

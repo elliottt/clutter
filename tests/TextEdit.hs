@@ -17,7 +17,9 @@ main = application $
            sel <- getSelection t
            putStrLn txt
            putStrLn sel
+           setNotPassword t
 
+     setPassword t '*'
      setSelectionColor t (Color 0xff 0 0 0x66)
      setCursorColor t (Color 0 0x99 0x99 0x99)
      setCursorSize t 10
