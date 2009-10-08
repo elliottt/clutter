@@ -8,5 +8,6 @@ import Clutter.Container       as X
 import Clutter.Color           as X
 import Clutter.Event           as X
 import Clutter.Init            as X
+import Clutter.Playable        as X
 import Clutter.Stage           as X
 import Clutter.Timeline        as X

@@ -1,4 +1,3 @@
-
 import Clutter
 import Cogl
 
@@ -23,16 +22,23 @@ main  = application $ do
   actorShow rect
   actorShow stage
 
-  t <- newTimeline 3600
-  setLoop t True
-
-  t `onNewFrame` \ms -> do
-    setPosition rect (sin (fromIntegral ms * pi / 1800) * 100 + 100) 100
-
   rect `onButtonPress` \_ -> do
     putStrLn "Clicked!"
     (d,_,_,_) <- getRotation rect yAxis
     setRotation rect yAxis (d + 10) 0 0 0
     return True
 
-  startTimeline t
+  t1 <- newTimeline 3600
+  t1 `onNewFrame` \ms -> do
+    setPosition rect (sin (fromIntegral ms * pi / 1800) * 100 + 100) 100
+
+  t2 <- newTimeline 3600
+  t2 `onNewFrame` \ms -> do
+    setPosition rect 100 (sin (fromIntegral ms * pi / 1800) * 100 + 100)
+
+  s <- newScore
+  startWith s t1
+  sequenceTimelines s t1 t2
+  setLoop s True
+
+  start s

@@ -15,6 +15,7 @@ exposed-modules:
   Clutter.Container
   Clutter.Event
   Clutter.Init
+  Clutter.Playable
   Clutter.Stage
   Clutter.Timeline
   Cogl
