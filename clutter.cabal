@@ -14,6 +14,7 @@ exposed-modules:
   Clutter.Color
   Clutter.Container
   Clutter.Event
+  Clutter.Group
   Clutter.Init
   Clutter.Playable
   Clutter.Stage

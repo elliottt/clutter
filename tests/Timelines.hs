@@ -1,40 +1,48 @@
 import Clutter
-import Cogl
+
+rectangle x y w h c bw bc =
+  do r <- newRectangle
+     setPosition r x y
+     setSize r w h
+     setColor r c
+     setBorderWidth r bw
+     setBorderColor r bc
+     return r
 
 main :: IO ()
+
 main  = application $ do
   stage <- stageGetDefault
   setColor stage (Color 0 0 0 0xff)
   setSize stage 320 200
 
-  rect1 <- newRectangleWithColor (Color 0x33 0x99 0x33 0x90)
-  setSize rect1 100 100
-  setPosition rect1 50 50
-  setBorderWidth rect1 3
-  setBorderColor rect1 (Color 0xff 0xff 0xff 0x90)
-  stage `addActor` rect1
+  rect1 <- rectangle 50 50 100 100
+              (Color 0x33 0x99 0x33 0x90) 3 (Color 0xff 0xff 0xff 0x90)
 
-  rect <- newTextWithColor (Font "") "Click me!" (Color 0xff 0x00 0xff 0x90)
-  setPosition rect 100 100
-  setReactive rect True
-  stage `addActor` rect
+  g <- newGroup
+  addActor g =<< rectangle 0 0 100 100 (Color 0x00 0xff 0xff 0x90)
+                                       3 (Color 0xff 0xff 0xff 0x90)
+  addActor g =<< newTextWithColor (Font "") "Click me!"
+                                      (Color 0xff 0x00 0xff 0x90)
+  setReactive g True
 
-  actorShow rect
+  addActor stage rect1
+  addActor stage g
   actorShow stage
 
-  rect `onButtonPress` \_ -> do
+  g `onButtonPress` \_ -> do
     putStrLn "Clicked!"
-    (d,_,_,_) <- getRotation rect yAxis
-    setRotation rect yAxis (d + 10) 0 0 0
+    (d,_,_,_) <- getRotation g yAxis
+    setRotation g yAxis (d + 10) 0 0 0
     return True
 
   t1 <- newTimeline 3600
   t1 `onNewFrame` \ms -> do
-    setPosition rect (sin (fromIntegral ms * pi / 1800) * 100 + 100) 100
+    setPosition g (sin (fromIntegral ms * pi / 1800) * 100 + 100) 100
 
   t2 <- newTimeline 3600
   t2 `onNewFrame` \ms -> do
-    setPosition rect 100 (sin (fromIntegral ms * pi / 1800) * 100 + 100)
+    setPosition g 100 (sin (fromIntegral ms * pi / 1800) * 100 + 100)
 
   s <- newScore
   startWith s t1
@@ -42,3 +50,4 @@ main  = application $ do
   setLoop s True
 
   start s
+
