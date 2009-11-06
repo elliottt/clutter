@@ -1,6 +1,5 @@
-module Clutter.Animate
-  ( Animation
-  , AnimationMode
+module Clutter.AnimationMode
+  ( AnimationMode(..)
   , mCustom
   , mLinear
   , mEaseIn2 
@@ -36,20 +35,13 @@ module Clutter.Animate
   , mLast
   ) where
 
-#include <clitter/clutter.h>
+#include <clutter/clutter.h>
 
-import Foreign.ForeignPtr
 import Foreign.C.Types
 
+newtype AnimationMode = AnimationMode CULong
 
-newtype Animation = A (ForeignPtr ())
-newtype AnimationMode = AM CULong
-
-instance ForeignObject Animation where rawPtr (A p) = p
-
-
-
-#enum  ClutterAnimationMode, AM\
+#enum AnimationMode, AnimationMode, \
   mCustom = CLUTTER_CUSTOM_MODE, \
   mLinear = CLUTTER_LINEAR, \
   mEaseIn2    = CLUTTER_EASE_IN_QUAD, \

@@ -11,6 +11,9 @@ exposed-modules:
   Clutter.Actor
   Clutter.Actor.Rectangle
   Clutter.Actor.Text
+  Clutter.Alpha
+  Clutter.AnimationMode
+  Clutter.Behavior
   Clutter.Color
   Clutter.Container
   Clutter.Event

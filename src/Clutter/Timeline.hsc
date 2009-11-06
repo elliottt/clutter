@@ -49,17 +49,12 @@ import Foreign.C
 
 -- Timelines -------------------------------------------------------------------
 
-newtype Timeline = T (ForeignPtr ())
-
-instance ForeignObject Timeline where
-  rawPtr (T t) = t
-
 foreign import ccall "clutter_timeline_new"
   clutter_timeline_new :: CUInt -> IO (Ptr ())
 
 -- | Create a new 'Timeline' with the specified duration.
 newTimeline :: Int -> IO Timeline
-newTimeline t = T `fmap` (newGObject =<< clutter_timeline_new (fromIntegral t))
+newTimeline t = ptrTimeline =<< clutter_timeline_new (fromIntegral t)
 
 
 newtype TimelineDirection = TD CULong
