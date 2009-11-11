@@ -1,18 +1,19 @@
 module Clutter.Alpha
   ( Alpha
+  , newAlpha
   , AnimationMode(..)
   ) where
 
-import Clutter.Timeline
 import Clutter.Private
-import Clutter.GLib
 import Clutter.AnimationMode
 
-import Data.Word
 import Foreign.Ptr
-import Foreign.ForeignPtr
 import Foreign.C.Types
 
+
+newAlpha :: Timeline -> AnimationMode -> IO Alpha
+newAlpha t (AnimationMode x) = withTimeline t $ \pt ->
+  ptrAlpha =<< clutter_alpha_new_full pt x
 
 --------------------------------------------------------------------------------
 

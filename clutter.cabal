@@ -14,6 +14,7 @@ exposed-modules:
   Clutter.Alpha
   Clutter.AnimationMode
   Clutter.Behavior
+  Clutter.Behavior.Opacity
   Clutter.Color
   Clutter.Container
   Clutter.Event
