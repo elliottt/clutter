@@ -90,3 +90,17 @@ ptrAlpha p          = Alpha `fmap` newGObject p
 withAlpha          :: Alpha -> (Ptr () -> IO a) -> IO a
 withAlpha           = withPtr
 
+
+--------------------------------------------------------------------------------
+newtype Path        = Path (ForeignPtr ())
+
+instance ForeignObject Path where
+  rawPtr (Path p) = p
+
+ptrPath            :: Ptr () -> IO Path
+ptrPath p           = Path `fmap` newGObject p
+
+withPath           :: Path -> (Ptr () -> IO a) -> IO a
+withPath            = withPtr
+
+

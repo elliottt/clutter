@@ -15,12 +15,14 @@ exposed-modules:
   Clutter.AnimationMode
   Clutter.Behavior
   Clutter.Behavior.Opacity
+  Clutter.Behavior.Path
   Clutter.Color
   Clutter.Container
   Clutter.Container.Group
   Clutter.Container.Stage
   Clutter.Event
   Clutter.Init
+  Clutter.Path
   Clutter.Playable
   Clutter.Timeline
   Cogl
