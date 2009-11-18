@@ -17,11 +17,11 @@ exposed-modules:
   Clutter.Behavior.Opacity
   Clutter.Color
   Clutter.Container
+  Clutter.Container.Group
+  Clutter.Container.Stage
   Clutter.Event
-  Clutter.Group
   Clutter.Init
   Clutter.Playable
-  Clutter.Stage
   Clutter.Timeline
   Cogl
   Cogl.Color

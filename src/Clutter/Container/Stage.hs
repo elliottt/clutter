@@ -1,4 +1,4 @@
-module Clutter.Stage
+module Clutter.Container.Stage
   ( Stage
   , stageGetDefault
   , HasColor(..)

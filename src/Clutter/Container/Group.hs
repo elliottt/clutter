@@ -1,4 +1,4 @@
-module Clutter.Group
+module Clutter.Container.Group
   ( Group
   , toGroup
   , newGroup
