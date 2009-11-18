@@ -9,6 +9,12 @@ module Clutter.Path
   , curve
   , relCurve
   , close
+
+  , Step(..)
+  , step
+  , steps
+  , newPathSteps
+  
   ) where
 
 import Clutter.Private
@@ -54,9 +60,34 @@ relCurve p (x1,y1) (x2,y2) (x3,y3)
 close              :: Path -> IO ()
 close p             = withPath p $ \pp -> clutter_path_add_close pp
 
+--------------------------------------------------------------------------------
+
+data Step           = Move    Point
+                    | MoveR   Point
+                    | Line    Point
+                    | LineR   Point
+                    | Curve   Point Point Point
+                    | CurveR  Point Point Point
+                    | Close
 
 
+step               :: Path -> Step -> IO ()
+step p c            = case c of
+                        Move x        -> move p x
+                        MoveR x       -> relMove p x
+                        Line x        -> line p x
+                        LineR x       -> relLine p x
+                        Curve x y z   -> curve p x y z
+                        CurveR x y z  -> relCurve p x y z
+                        Close         -> close p
 
+steps              :: Path -> [Step] -> IO ()
+steps p ss          = mapM_ (step p) ss
+
+newPathSteps       :: [Step] -> IO Path
+newPathSteps ss     = do p <- newPath
+                         steps p ss
+                         return p
 
 
 

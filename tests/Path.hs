@@ -18,11 +18,7 @@ rectangle s =
 path r =
   do t <- newTimeline 1000
      a <- newAlpha t mLinear
-     p <- newPath
-     move p (20,20)
-     relLine p (100,0)
-     relLine p (0,100)
-     close p
+     p <- newPathSteps [ Move (20,20), LineR (100,10), LineR (0,100), Close ]
      b <- newPathBehavior a p
      apply b r
      return t
