@@ -17,8 +17,8 @@ rectangle s =
 flipFlop act d x y =
   do t <- newTimeline d
      a <- newAlpha t mLinear
-     o1 <- newOpacity a y x
-     o2 <- newOpacity a x y
+     o1 <- newOpacityBehavior a y x
+     o2 <- newOpacityBehavior a x y
      r <- newIORef (Right (o1,o2))
      apply o1 act
      onCompleted t $

@@ -1,6 +1,6 @@
 module Clutter.Behavior.Opacity
-  ( Opacity
-  , newOpacity
+  ( OpacityBehavior
+  , newOpacityBehavior
   ) where
 
 import Clutter.Private
@@ -10,15 +10,15 @@ import Data.Word
 import Foreign.Ptr
 import Foreign.ForeignPtr
 
-newtype Opacity = Opacity (ForeignPtr ())
-instance ForeignObject Opacity where rawPtr (Opacity p) = p
-instance Behavior Opacity
+newtype OpacityBehavior = OpacityBehavior (ForeignPtr ())
+instance ForeignObject OpacityBehavior where rawPtr (OpacityBehavior p) = p
+instance Behavior OpacityBehavior
 
-newOpacity :: Alpha -> Word8 -> Word8 -> IO Opacity
-newOpacity a x y = withAlpha a $ \ap ->
+newOpacityBehavior :: Alpha -> Word8 -> Word8 -> IO OpacityBehavior
+newOpacityBehavior a x y = withAlpha a $ \ap ->
   do p  <- clutter_behaviour_opacity_new ap x y
      fp <- newGObject p
-     return (Opacity fp)
+     return (OpacityBehavior fp)
 
 --------------------------------------------------------------------------------
 
