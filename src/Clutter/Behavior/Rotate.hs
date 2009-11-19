@@ -13,8 +13,6 @@ module Clutter.Behavior.Rotate
   ) where
 
 import Clutter.Private
-import Clutter.GLib
-import Clutter.Private.Types
 
 import Foreign.Ptr
 import Foreign.ForeignPtr

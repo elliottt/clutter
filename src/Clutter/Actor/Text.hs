@@ -85,7 +85,6 @@ module Clutter.Actor.Text
 
 import Clutter.Color
 import Clutter.Private
-import Clutter.GLib
 
 import Foreign hiding (void)
 import Foreign.C

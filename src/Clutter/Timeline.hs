@@ -1,7 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-#include <clutter/clutter.h>
-
 module Clutter.Timeline (
     -- * Timelines
     Timeline
@@ -39,7 +37,6 @@ module Clutter.Timeline (
   , removeAllTimelines
   ) where
 
-import Clutter.GLib
 import Clutter.Playable
 import Clutter.Private
 
@@ -55,13 +52,6 @@ foreign import ccall "clutter_timeline_new"
 -- | Create a new 'Timeline' with the specified duration.
 newTimeline :: Int -> IO Timeline
 newTimeline t = ptrTimeline =<< clutter_timeline_new (fromIntegral t)
-
-
-newtype TimelineDirection = TD CULong
-
-#enum TimelineDirection, TD\
-  , timelineForward  = CLUTTER_TIMELINE_FORWARD\
-  , timelineBackward = CLUTTER_TIMELINE_BACKWARD
 
 -- | Set the direction of a 'Timeline'.
 setTimelineDirection :: Timeline -> TimelineDirection -> IO ()

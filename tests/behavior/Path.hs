@@ -4,7 +4,6 @@ import Clutter.Timeline
 import Clutter.Path
 import Clutter.Behavior.Path
 import Clutter.Alpha
-import Clutter.AnimationMode
 
 rectangle s =
   do r <- newRectangleWithColor (Color 0xff 0 0 0x99)

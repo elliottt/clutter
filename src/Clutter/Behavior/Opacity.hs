@@ -4,7 +4,6 @@ module Clutter.Behavior.Opacity
   ) where
 
 import Clutter.Private
-import Clutter.GLib
 
 import Data.Word
 import Foreign.Ptr

@@ -1,4 +1,4 @@
-module Clutter.GLib where
+module Clutter.Private.GLib where
 
 import Foreign.C.String
 import Foreign.C.Types

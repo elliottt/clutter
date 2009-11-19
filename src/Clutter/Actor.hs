@@ -37,9 +37,7 @@ import Foreign(Storable(peek),with)
 import Foreign.C.String
 import Foreign.Ptr(Ptr)
 
-import Clutter.GLib
-import Clutter.Private(ButtonEvent(..),Actor,withActor)
-import Clutter.Private.Types
+import Clutter.Private
 
 
 foreign import ccall "clutter_actor_get_name"

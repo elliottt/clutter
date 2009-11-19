@@ -13,9 +13,8 @@ import Foreign.ForeignPtr(ForeignPtr, newForeignPtr_)
 import Foreign.Storable(peek)
 import Foreign.Marshal.Utils(with)
 
-import Clutter.Private
 import Clutter.Color
-import Clutter.GLib
+import Clutter.Private
 
 
 --------------------------------------------------------------------------------

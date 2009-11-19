@@ -2,7 +2,6 @@ import Clutter
 import Clutter.Behavior.Rotate
 import Clutter.Behavior
 import Clutter.Alpha
-import Clutter.AnimationMode
 import Data.IORef
 
 rectangle s =

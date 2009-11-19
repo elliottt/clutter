@@ -12,7 +12,6 @@ exposed-modules:
   Clutter.Actor.Rectangle
   Clutter.Actor.Text
   Clutter.Alpha
-  Clutter.AnimationMode
   Clutter.Behavior
   Clutter.Behavior.Depth
   Clutter.Behavior.Opacity
@@ -35,8 +34,9 @@ exposed-modules:
 
 other-modules:
   Clutter.Private
-  Clutter.GLib
+  Clutter.Private.GLib
   Clutter.Private.Types
+  Clutter.Private.Enums
 
 extensions:
   ForeignFunctionInterface

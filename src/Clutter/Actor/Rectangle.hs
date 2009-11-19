@@ -1,7 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-#include <clutter/clutter.h>
-
 module Clutter.Actor.Rectangle (
     Rectangle
   , newRectangle
@@ -14,8 +12,7 @@ module Clutter.Actor.Rectangle (
   ) where
 
 import Clutter.Color
-import Clutter.Private(SomeActor,ForeignObject(..),withPtr,Actor,withActor)
-import Clutter.GLib
+import Clutter.Private
 
 import Foreign
 import Foreign.C

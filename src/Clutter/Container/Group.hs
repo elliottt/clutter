@@ -12,7 +12,6 @@ import Foreign.ForeignPtr(ForeignPtr)
 import Foreign.C.Types
 import Data.Word
 
-import Clutter.GLib
 import Clutter.Private
 
 

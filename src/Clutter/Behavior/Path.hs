@@ -6,7 +6,6 @@ module Clutter.Behavior.Path
   ) where
 
 import Clutter.Private
-import Clutter.GLib
 
 import Foreign.Ptr
 import Foreign.ForeignPtr
