@@ -17,6 +17,7 @@ exposed-modules:
   Clutter.Behavior.Opacity
   Clutter.Behavior.Path
   Clutter.Behavior.Rotate
+  Clutter.Behavior.Scale
   Clutter.Color
   Clutter.Container
   Clutter.Container.Group
