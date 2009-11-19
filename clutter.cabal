@@ -17,6 +17,7 @@ exposed-modules:
   Clutter.Behavior.Depth
   Clutter.Behavior.Opacity
   Clutter.Behavior.Path
+  Clutter.Behavior.Rotate
   Clutter.Color
   Clutter.Container
   Clutter.Container.Group
@@ -35,6 +36,7 @@ exposed-modules:
 other-modules:
   Clutter.Private
   Clutter.GLib
+  Clutter.Private.Types
 
 extensions:
   ForeignFunctionInterface

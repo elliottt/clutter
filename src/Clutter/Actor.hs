@@ -1,7 +1,5 @@
 {-# LANGUAGE ForeignFunctionInterface #-}
 
-#include <clutter/clutter.h>
-
 module Clutter.Actor
   (
   -- ** General
@@ -36,12 +34,12 @@ module Clutter.Actor
 
 import Control.Monad (liftM2)
 import Foreign(Storable(peek),with)
-import Foreign.C.Types
 import Foreign.C.String
 import Foreign.Ptr(Ptr)
 
 import Clutter.GLib
 import Clutter.Private(ButtonEvent(..),Actor,withActor)
+import Clutter.Private.Types
 
 
 foreign import ccall "clutter_actor_get_name"
@@ -132,29 +130,22 @@ getReactive t = withActor t clutter_actor_get_reactive
 foreign import ccall "clutter_actor_get_reactive"
   clutter_actor_get_reactive :: Ptr () -> IO Bool
 
-newtype RotateAxis = RA CInt deriving Eq
-
-#enum RotateAxis, RA\
-  , xAxis = CLUTTER_X_AXIS\
-  , yAxis = CLUTTER_Y_AXIS\
-  , zAxis = CLUTTER_Z_AXIS
-
 foreign import ccall "clutter_actor_set_rotation"
-  clutter_actor_set_rotation :: Ptr () -> CInt -> Double -> Float -> Float
+  clutter_actor_set_rotation :: Ptr () -> RotateAxis -> Double -> Float -> Float
                              -> Float -> IO ()
 
 setRotation :: Actor a
             => a -> RotateAxis -> Double -> Float -> Float -> Float -> IO ()
-setRotation t (RA r) angle x y z = withActor t $ \p ->
+setRotation t r angle x y z = withActor t $ \p ->
   clutter_actor_set_rotation p r angle x y z
 
 foreign import ccall "clutter_actor_get_rotation"
-  clutter_actor_get_rotation :: Ptr () -> CInt -> Ptr Float -> Ptr Float
+  clutter_actor_get_rotation :: Ptr () -> RotateAxis -> Ptr Float -> Ptr Float
                              -> Ptr Float -> IO Double
 
 getRotation :: Actor a
             => a -> RotateAxis -> IO (Double,Float,Float,Float)
-getRotation a (RA r) =
+getRotation a r =
   withActor a $ \p  ->
   with      0 $ \xp ->
   with      0 $ \yp ->
