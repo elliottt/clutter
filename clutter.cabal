@@ -1,10 +1,14 @@
 name:           clutter
 version:        0.0.1
-build-type:     Configure
+build-type:     Simple
 hs-source-dirs: src
+cabal-version:  >= 1.6
 
 build-depends:
   base >= 4
+
+pkgconfig-depends:
+  clutter-1.0 >= 1.0
 
 exposed-modules:
   Clutter
